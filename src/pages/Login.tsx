@@ -7,6 +7,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, LogIn, Shield } from 'lucide-react';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { doc, getDoc } from "firebase/firestore";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,9 +24,9 @@ const Login = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!formData.email || !formData.password) {
       toast({
         title: "Error",
@@ -34,7 +35,7 @@ const Login = () => {
       });
       return;
     }
-
+  
     setIsLoading(true);
 
     signInWithEmailAndPassword(auth, formData.email, formData.password)
@@ -51,9 +52,14 @@ const Login = () => {
           title: "Signed in",
           description: `Welcome back${user.displayName ? `, ${user.displayName}` : ''}!`
         });
-        navigate('/dashboard');
-      } else {
-        setIsLoading(false);
+
+        if (user.email === "admin@bdavid.com") {
+          navigate('/admin');
+        } else {
+          navigate('/dashboard');
+        }
+      })
+      .catch((error) => {
         toast({
           title: "Login failed",
           description: error.message,

@@ -7,6 +7,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!formData.name || !formData.email || !formData.password) {
       toast({
         title: "Error",
@@ -36,7 +37,7 @@ const Register = () => {
       });
       return;
     }
-
+  
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",
@@ -45,24 +46,39 @@ const Register = () => {
       });
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      await updateProfile(userCredential.user, {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+  
+      const user = userCredential.user;
+  
+      await updateProfile(user, {
         displayName: formData.name
       });
-
+  
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        name: formData.name,
+        email: formData.email,
+        role: "user", // default role
+        createdAt: new Date().toISOString()
+      });
+  
       toast({
         title: "Account created",
         description: "You have successfully registered an account"
       });
-
-      navigate('/dashboard');
+  
+      navigate("/dashboard");
     } catch (error: any) {
       toast({
-        title: "Registration failed",
+        title: "Error",
         description: error.message,
         variant: "destructive"
       });
