@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth, db } from '@/lib/firebase';
 import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {

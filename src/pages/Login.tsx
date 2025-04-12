@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '@/lib/firebase'; 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, LogIn, Shield } from 'lucide-react';
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import { doc, getDoc } from "firebase/firestore";
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -26,17 +23,18 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!formData.email || !formData.password) {
       toast({
         title: "Error",
         description: "Please fill in all fields",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
-  
+
     setIsLoading(true);
+<<<<<<< HEAD
 
     signInWithEmailAndPassword(auth, formData.email, formData.password)
       .then((userCredential) => {
@@ -93,6 +91,58 @@ const Login = () => {
     }, 1000);
   };
 
+=======
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const userData = docSnap.data();
+
+        toast({
+          title: "Signed in",
+          description: `Welcome back, ${userData.name || 'User'}!`,
+        });
+
+        if (userData.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
+      } else {
+        toast({
+          title: "Error",
+          description: "User record not found in database",
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
+      let message = "Something went wrong. Please try again.";
+
+      if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+        message = "Invalid email or password.";
+      } else if (error.code === "auth/too-many-requests") {
+        message = "Too many failed attempts. Please try again later.";
+      }
+
+      toast({
+        title: "Login failed",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+>>>>>>> 118f41a (firebase)
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
