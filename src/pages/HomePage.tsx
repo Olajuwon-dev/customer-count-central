@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle, Users, Globe, Database } from 'lucide-react';
+import { ArrowRight, CheckCircle, Users, Globe, Database, Shield, History } from 'lucide-react';
 
 const HomePage = () => {
   return (
@@ -11,10 +11,11 @@ const HomePage = () => {
       <section className="bg-gradient-to-r from-brand-600 to-teal-600 py-20">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Track Your Customers & Websites <br className="hidden md:block" /> In One Place
+            Your Website Information Is <br className="hidden md:block" /> Secure With Olajuwon-Dev
           </h1>
           <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-            The simplest way to manage your customers and keep track of their websites - all in one centralized platform.
+            Share your website details in our secure platform. Track your project's progress, view history, 
+            and maintain complete control of your information at all times.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/register">
@@ -34,26 +35,26 @@ const HomePage = () => {
       {/* Features Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Choose CustomerTrack?</h2>
+          <h2 className="text-3xl font-bold text-center mb-12">Why Choose B.david?</h2>
           
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-gray-50 rounded-lg p-6 text-center card-hover">
               <div className="bg-brand-100 p-3 rounded-full inline-flex mb-4">
-                <Users className="h-8 w-8 text-brand-600" />
+                <Shield className="h-8 w-8 text-brand-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Customer Management</h3>
+              <h3 className="text-xl font-semibold mb-3">Secure Information</h3>
               <p className="text-gray-600">
-                Keep track of all your customers in one place with detailed profiles and contact information.
+                Your information is encrypted and securely stored. Only you and authorized personnel have access.
               </p>
             </div>
             
             <div className="bg-gray-50 rounded-lg p-6 text-center card-hover">
               <div className="bg-teal-100 p-3 rounded-full inline-flex mb-4">
-                <Globe className="h-8 w-8 text-teal-600" />
+                <History className="h-8 w-8 text-teal-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Website Tracking</h3>
+              <h3 className="text-xl font-semibold mb-3">Project Tracking</h3>
               <p className="text-gray-600">
-                Monitor all your clients' websites, domains, and hosting details for easy management.
+                Track your project's progress in real-time and view complete history of all updates and milestones.
               </p>
             </div>
             
@@ -61,9 +62,9 @@ const HomePage = () => {
               <div className="bg-brand-100 p-3 rounded-full inline-flex mb-4">
                 <Database className="h-8 w-8 text-brand-600" />
               </div>
-              <h3 className="text-xl font-semibold mb-3">Centralized Database</h3>
+              <h3 className="text-xl font-semibold mb-3">Centralized Dashboard</h3>
               <p className="text-gray-600">
-                All your customer and website data in one secure location, accessible anytime.
+                Access all your website details, project status, and communication history in one place.
               </p>
             </div>
           </div>

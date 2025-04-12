@@ -11,6 +11,8 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import AddCustomer from "./pages/AddCustomer";
 import CustomerDetail from "./pages/CustomerDetail";
+import Profile from "./pages/Profile";
+import AdminDashboard from "./pages/AdminDashboard";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 
@@ -29,6 +31,8 @@ const App = () => (
           <Route path="/dashboard" element={<Layout><Dashboard /></Layout>} />
           <Route path="/add-customer" element={<Layout><AddCustomer /></Layout>} />
           <Route path="/customer/:id" element={<Layout><CustomerDetail /></Layout>} />
+          <Route path="/profile" element={<Layout><Profile /></Layout>} />
+          <Route path="/admin" element={<Layout><AdminDashboard /></Layout>} />
           <Route path="/about" element={<Layout><About /></Layout>} />
           <Route path="*" element={<Layout><NotFound /></Layout>} />
         </Routes>

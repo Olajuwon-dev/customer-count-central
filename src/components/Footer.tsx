@@ -19,7 +19,7 @@ const Footer = () => {
         </div>
         <div className="mt-8 md:mt-0 md:order-1">
           <p className="text-center text-gray-500">
-            &copy; {new Date().getFullYear()} CustomerTrack. All rights reserved.
+            &copy; {new Date().getFullYear()} B.david / Olajuwon-Dev. All rights reserved.
           </p>
         </div>
       </div>
