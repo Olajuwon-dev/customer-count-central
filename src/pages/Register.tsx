@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ const Register = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name || !formData.email || !formData.password) {
@@ -46,19 +48,27 @@ const Register = () => {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      localStorage.setItem('user', JSON.stringify({
-        name: formData.name,
-        email: formData.email
-      }));
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+      await updateProfile(userCredential.user, {
+        displayName: formData.name
+      });
 
-      setIsLoading(false);
       toast({
         title: "Account created",
         description: "You have successfully registered an account"
       });
+
       navigate('/dashboard');
-    }, 1500);
+    } catch (error: any) {
+      toast({
+        title: "Registration failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -68,7 +78,7 @@ const Register = () => {
           <h2 className="text-3xl font-bold text-gray-900">Create an Account</h2>
           <p className="mt-2 text-gray-600">Sign up to start tracking your customers</p>
         </div>
-
+        
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1">
             <Label htmlFor="name">Full Name</Label>
@@ -83,7 +93,7 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-
+          
           <div className="space-y-1">
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -97,7 +107,7 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-
+          
           <div className="space-y-1">
             <Label htmlFor="password">Password</Label>
             <div className="relative">
@@ -124,7 +134,7 @@ const Register = () => {
               </button>
             </div>
           </div>
-
+          
           <div className="space-y-1">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
@@ -138,7 +148,7 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-
+          
           <Button 
             type="submit" 
             className="auth-button" 
@@ -159,7 +169,7 @@ const Register = () => {
               </span>
             )}
           </Button>
-
+          
           <div className="text-center mt-4">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}

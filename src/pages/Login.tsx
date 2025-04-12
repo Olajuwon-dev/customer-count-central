@@ -5,9 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, LogIn, Shield } from 'lucide-react';
-
-
-
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,8 +25,7 @@ const Login = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Simple validation
+
     if (!formData.email || !formData.password) {
       toast({
         title: "Error",
@@ -39,77 +37,37 @@ const Login = () => {
 
     setIsLoading(true);
 
-    // For now, we'll simulate it with a timeout
-    setTimeout(() => {
-      // Check if we have a user (this would be a backend check in a real app)
-      const storedUser = localStorage.getItem('user');
-      
-      if (storedUser) {
-        // In a real app, we would validate the credentials
-        // For demo, just log them in if there's a stored user
-        
-        setIsLoading(false);
+    signInWithEmailAndPassword(auth, formData.email, formData.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+
+        localStorage.setItem('user', JSON.stringify({
+          name: user.displayName,
+          email: user.email,
+          uid: user.uid
+        }));
+
         toast({
           title: "Signed in",
-          description: "You have successfully signed in"
+          description: `Welcome back${user.displayName ? `, ${user.displayName}` : ''}!`
         });
-        navigate('/profile');
+        navigate('/dashboard');
       } else {
         setIsLoading(false);
         toast({
-          title: "Error",
-          description: "Invalid email or password. Please try again or register.",
+          title: "Login failed",
+          description: error.message,
           variant: "destructive"
         });
-      }
-    }, 1500);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleAdminLogin = () => {
     setIsLoading(true);
     
-<<<<<<< HEAD
-    const adminUsername = document.getElementById('admin-username') as HTMLInputElement;
-    const adminPassword = document.getElementById('admin-password') as HTMLInputElement;
-    
-    if (!adminUsername || !adminPassword || !adminUsername.value || !adminPassword.value) {
-      toast({
-        title: "Error",
-        description: "Please enter both username and password",
-        variant: "destructive"
-      });
-      setIsLoading(false);
-      return;
-    }
-    
-    // Check admin credentials
-    if (adminUsername.value === 'admin' && adminPassword.value === '12345') {
-      // Create admin user in localStorage
-      const adminUser = {
-        name: "Admin User",
-        email: "admin@bdavid.com",
-        role: 'admin'
-      };
-      
-      localStorage.setItem('user', JSON.stringify(adminUser));
-      
-      setTimeout(() => {
-        setIsLoading(false);
-        toast({
-          title: "Admin Signed In",
-          description: "You have successfully signed in as an admin"
-        });
-        navigate('/admin');
-      }, 1000);
-    } else {
-      setIsLoading(false);
-      toast({
-        title: "Error",
-        description: "Invalid admin credentials",
-        variant: "destructive"
-      });
-    }
-=======
     // Create admin user in localStorage
     const adminUser = {
       name: "Admin User",
@@ -127,7 +85,6 @@ const Login = () => {
       });
       navigate('/admin');
     }, 1000);
->>>>>>> 23f3146 (login/navbar)
   };
 
   return (
