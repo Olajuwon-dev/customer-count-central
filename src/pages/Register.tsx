@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,9 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
-
-
-
 
 const Register = () => {
   const navigate = useNavigate();
@@ -29,8 +25,7 @@ const Register = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Simple validation
+
     if (!formData.name || !formData.email || !formData.password) {
       toast({
         title: "Error",
@@ -51,15 +46,12 @@ const Register = () => {
 
     setIsLoading(true);
 
-    // This is where we would normally connect to a backend
-    // For now, we'll simulate it with a timeout
     setTimeout(() => {
-      // Store in localStorage for demo purposes
       localStorage.setItem('user', JSON.stringify({
         name: formData.name,
         email: formData.email
       }));
-      
+
       setIsLoading(false);
       toast({
         title: "Account created",
@@ -76,7 +68,7 @@ const Register = () => {
           <h2 className="text-3xl font-bold text-gray-900">Create an Account</h2>
           <p className="mt-2 text-gray-600">Sign up to start tracking your customers</p>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1">
             <Label htmlFor="name">Full Name</Label>
@@ -91,7 +83,7 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-          
+
           <div className="space-y-1">
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -105,7 +97,7 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-          
+
           <div className="space-y-1">
             <Label htmlFor="password">Password</Label>
             <div className="relative">
@@ -132,7 +124,7 @@ const Register = () => {
               </button>
             </div>
           </div>
-          
+
           <div className="space-y-1">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
@@ -146,7 +138,7 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-          
+
           <Button 
             type="submit" 
             className="auth-button" 
@@ -167,7 +159,7 @@ const Register = () => {
               </span>
             )}
           </Button>
-          
+
           <div className="text-center mt-4">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}
