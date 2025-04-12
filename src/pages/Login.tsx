@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -66,6 +65,7 @@ const Login = () => {
   const handleAdminLogin = () => {
     setIsLoading(true);
     
+<<<<<<< HEAD
     const adminUsername = document.getElementById('admin-username') as HTMLInputElement;
     const adminPassword = document.getElementById('admin-password') as HTMLInputElement;
     
@@ -106,6 +106,25 @@ const Login = () => {
         variant: "destructive"
       });
     }
+=======
+    // Create admin user in localStorage
+    const adminUser = {
+      name: "Admin User",
+      email: "admin@bdavid.com",
+      isAdmin: true
+    };
+    
+    localStorage.setItem('user', JSON.stringify(adminUser));
+    
+    setTimeout(() => {
+      setIsLoading(false);
+      toast({
+        title: "Admin Signed In",
+        description: "You have successfully signed in as an admin"
+      });
+      navigate('/admin');
+    }, 1000);
+>>>>>>> 23f3146 (login/navbar)
   };
 
   return (
@@ -189,6 +208,7 @@ const Login = () => {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
+<<<<<<< HEAD
               <span className="px-2 bg-white text-gray-500">Admin Login</span>
             </div>
           </div>
@@ -224,6 +244,22 @@ const Login = () => {
               Admin Login
             </Button>
           </div>
+=======
+              <span className="px-2 bg-white text-gray-500">Or</span>
+            </div>
+          </div>
+          
+          <Button 
+            type="button"
+            variant="outline"
+            className="w-full flex items-center justify-center"
+            onClick={handleAdminLogin}
+            disabled={isLoading}
+          >
+            <Shield className="mr-2 h-5 w-5" />
+            Admin Login
+          </Button>
+>>>>>>> 23f3146 (login/navbar)
           
           <div className="text-center mt-4">
             <p className="text-sm text-gray-600">

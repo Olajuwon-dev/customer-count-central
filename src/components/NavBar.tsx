@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, User, LayoutDashboard, FileText, History } from 'lucide-react';
+=======
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { Menu, X, User, LayoutDashboard } from 'lucide-react';
+>>>>>>> 23f3146 (login/navbar)
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const NavBar = () => {
@@ -18,7 +25,11 @@ const NavBar = () => {
       setIsLoggedIn(true);
       // Check if user is admin
       const userData = JSON.parse(storedUser);
+<<<<<<< HEAD
       if (userData.role === 'admin') {
+=======
+      if (userData.isAdmin) {
+>>>>>>> 23f3146 (login/navbar)
         setIsAdmin(true);
       }
     }
@@ -51,6 +62,7 @@ const NavBar = () => {
               
               {isLoggedIn ? (
                 <>
+<<<<<<< HEAD
                   {isAdmin ? (
                     // Admin navigation links
                     <>
@@ -77,6 +89,19 @@ const NavBar = () => {
                     <User className="h-4 w-4 mr-1" /> Profile
                   </Link>
                   
+=======
+                  <Link to="/dashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
+                    Dashboard
+                  </Link>
+                  <Link to="/profile" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                    <User className="h-4 w-4 mr-1" /> Profile
+                  </Link>
+                  {isAdmin && (
+                    <Link to="/admin" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                      <LayoutDashboard className="h-4 w-4 mr-1" /> Admin
+                    </Link>
+                  )}
+>>>>>>> 23f3146 (login/navbar)
                   <Button 
                     variant="outline" 
                     onClick={handleLogout} 
@@ -177,7 +202,19 @@ const NavBar = () => {
                 >
                   <User className="h-4 w-4 mr-1" /> Profile
                 </Link>
+<<<<<<< HEAD
                 
+=======
+                {isAdmin && (
+                  <Link 
+                    to="/admin" 
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <LayoutDashboard className="h-4 w-4 mr-1" /> Admin
+                  </Link>
+                )}
+>>>>>>> 23f3146 (login/navbar)
                 <Button 
                   variant="outline" 
                   onClick={() => {
