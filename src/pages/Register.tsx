@@ -7,6 +7,9 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, UserPlus } from 'lucide-react';
 
+
+
+
 const Register = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
