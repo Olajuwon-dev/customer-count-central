@@ -15,6 +15,9 @@ import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import SubmitInfo from "./pages/SubmitInfo";
+import MyProjects from "./pages/MyProjects";
+import ProjectDetail from "./pages/ProjectDetail";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +37,9 @@ const App = () => (
           <Route path="/profile" element={<Layout><Profile /></Layout>} />
           <Route path="/admin" element={<Layout><AdminDashboard /></Layout>} />
           <Route path="/about" element={<Layout><About /></Layout>} />
+          <Route path="/submit-info" element={<Layout><SubmitInfo /></Layout>} />
+          <Route path="/my-projects" element={<Layout><MyProjects /></Layout>} />
+          <Route path="/project/:id" element={<Layout><ProjectDetail /></Layout>} />
           <Route path="*" element={<Layout><NotFound /></Layout>} />
         </Routes>
       </BrowserRouter>

@@ -51,7 +51,7 @@ const Login = () => {
           title: "Signed in",
           description: "You have successfully signed in"
         });
-        navigate('/dashboard');
+        navigate('/profile');
       } else {
         setIsLoading(false);
         toast({
@@ -66,23 +66,46 @@ const Login = () => {
   const handleAdminLogin = () => {
     setIsLoading(true);
     
-    // Create admin user in localStorage
-    const adminUser = {
-      name: "Admin User",
-      email: "admin@bdavid.com",
-      isAdmin: true
-    };
+    const adminUsername = document.getElementById('admin-username') as HTMLInputElement;
+    const adminPassword = document.getElementById('admin-password') as HTMLInputElement;
     
-    localStorage.setItem('user', JSON.stringify(adminUser));
+    if (!adminUsername || !adminPassword || !adminUsername.value || !adminPassword.value) {
+      toast({
+        title: "Error",
+        description: "Please enter both username and password",
+        variant: "destructive"
+      });
+      setIsLoading(false);
+      return;
+    }
     
-    setTimeout(() => {
+    // Check admin credentials
+    if (adminUsername.value === 'admin' && adminPassword.value === '12345') {
+      // Create admin user in localStorage
+      const adminUser = {
+        name: "Admin User",
+        email: "admin@bdavid.com",
+        role: 'admin'
+      };
+      
+      localStorage.setItem('user', JSON.stringify(adminUser));
+      
+      setTimeout(() => {
+        setIsLoading(false);
+        toast({
+          title: "Admin Signed In",
+          description: "You have successfully signed in as an admin"
+        });
+        navigate('/admin');
+      }, 1000);
+    } else {
       setIsLoading(false);
       toast({
-        title: "Admin Signed In",
-        description: "You have successfully signed in as an admin"
+        title: "Error",
+        description: "Invalid admin credentials",
+        variant: "destructive"
       });
-      navigate('/admin');
-    }, 1000);
+    }
   };
 
   return (
@@ -166,20 +189,41 @@ const Login = () => {
               <div className="w-full border-t border-gray-300"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or</span>
+              <span className="px-2 bg-white text-gray-500">Admin Login</span>
             </div>
           </div>
           
-          <Button 
-            type="button"
-            variant="outline"
-            className="w-full flex items-center justify-center"
-            onClick={handleAdminLogin}
-            disabled={isLoading}
-          >
-            <Shield className="mr-2 h-5 w-5" />
-            Admin Login
-          </Button>
+          <div className="space-y-3">
+            <div className="space-y-1">
+              <Label htmlFor="admin-username">Admin Username</Label>
+              <Input
+                id="admin-username"
+                type="text"
+                placeholder="Enter admin username"
+                className="auth-input"
+              />
+            </div>
+            
+            <div className="space-y-1">
+              <Label htmlFor="admin-password">Admin Password</Label>
+              <Input
+                id="admin-password"
+                type="password"
+                placeholder="Enter admin password"
+                className="auth-input"
+              />
+            </div>
+            
+            <Button 
+              type="button"
+              className="w-full flex items-center justify-center bg-gray-800 hover:bg-gray-900"
+              onClick={handleAdminLogin}
+              disabled={isLoading}
+            >
+              <Shield className="mr-2 h-5 w-5" />
+              Admin Login
+            </Button>
+          </div>
           
           <div className="text-center mt-4">
             <p className="text-sm text-gray-600">
