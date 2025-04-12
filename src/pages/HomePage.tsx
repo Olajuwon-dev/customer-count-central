@@ -74,15 +74,9 @@ const HomePage = () => {
       {/* CTA Section */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 text-center">
-<<<<<<< HEAD
           <h2 className="text-3xl font-bold mb-6">Ready to start tracking your Project?</h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-            Join, hundreds of businesses already using CustomerTrack to manage their client relationships.
-=======
-          <h2 className="text-3xl font-bold mb-6">Ready to start tracking your customers?</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
             Join hundreds of businesses already using CustomerTrack to manage their client relationships.
->>>>>>> e4e812c3cc92553b4dc0df5715d216a8b77b7fad
           </p>
           <Link to="/register">
             <Button size="lg" className="bg-brand-600 hover:bg-brand-700">
