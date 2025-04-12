@@ -1,14 +1,34 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, LayoutDashboard } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useIsMobile();
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // This will be replaced with auth logic later
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in from localStorage
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setIsLoggedIn(true);
+      // Check if user is admin
+      const userData = JSON.parse(storedUser);
+      if (userData.isAdmin) {
+        setIsAdmin(true);
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setIsLoggedIn(false);
+    setIsAdmin(false);
+  };
 
   return (
     <nav className="bg-white shadow-sm border-b">
@@ -33,12 +53,17 @@ const NavBar = () => {
                   <Link to="/dashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
                     Dashboard
                   </Link>
-                  <Link to="/profile" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
-                    Profile
+                  <Link to="/profile" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                    <User className="h-4 w-4 mr-1" /> Profile
                   </Link>
+                  {isAdmin && (
+                    <Link to="/admin" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+                      <LayoutDashboard className="h-4 w-4 mr-1" /> Admin
+                    </Link>
+                  )}
                   <Button 
                     variant="outline" 
-                    onClick={() => setIsLoggedIn(false)} 
+                    onClick={handleLogout} 
                     className="ml-4"
                   >
                     Sign Out
@@ -99,15 +124,24 @@ const NavBar = () => {
                 </Link>
                 <Link 
                   to="/profile" 
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Profile
+                  <User className="h-4 w-4 mr-1" /> Profile
                 </Link>
+                {isAdmin && (
+                  <Link 
+                    to="/admin" 
+                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <LayoutDashboard className="h-4 w-4 mr-1" /> Admin
+                  </Link>
+                )}
                 <Button 
                   variant="outline" 
                   onClick={() => {
-                    setIsLoggedIn(false);
+                    handleLogout();
                     setIsMenuOpen(false);
                   }} 
                   className="w-full mt-2"

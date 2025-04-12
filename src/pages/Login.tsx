@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { Eye, EyeOff, LogIn } from 'lucide-react';
+import { Eye, EyeOff, LogIn, Shield } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -61,6 +61,28 @@ const Login = () => {
         });
       }
     }, 1500);
+  };
+
+  const handleAdminLogin = () => {
+    setIsLoading(true);
+    
+    // Create admin user in localStorage
+    const adminUser = {
+      name: "Admin User",
+      email: "admin@bdavid.com",
+      isAdmin: true
+    };
+    
+    localStorage.setItem('user', JSON.stringify(adminUser));
+    
+    setTimeout(() => {
+      setIsLoading(false);
+      toast({
+        title: "Admin Signed In",
+        description: "You have successfully signed in as an admin"
+      });
+      navigate('/admin');
+    }, 1000);
   };
 
   return (
@@ -120,7 +142,7 @@ const Login = () => {
           
           <Button 
             type="submit" 
-            className="auth-button" 
+            className="auth-button w-full" 
             disabled={isLoading}
           >
             {isLoading ? (
@@ -137,6 +159,26 @@ const Login = () => {
                 Sign In
               </span>
             )}
+          </Button>
+          
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-300"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-white text-gray-500">Or</span>
+            </div>
+          </div>
+          
+          <Button 
+            type="button"
+            variant="outline"
+            className="w-full flex items-center justify-center"
+            onClick={handleAdminLogin}
+            disabled={isLoading}
+          >
+            <Shield className="mr-2 h-5 w-5" />
+            Admin Login
           </Button>
           
           <div className="text-center mt-4">
