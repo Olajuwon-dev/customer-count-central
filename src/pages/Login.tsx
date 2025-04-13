@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 import { Eye, EyeOff, LogIn, Shield } from 'lucide-react';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth, db } from '@/lib/firebase';
 import { doc, getDoc } from "firebase/firestore";
 
@@ -14,6 +14,9 @@ const Login = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -69,11 +72,31 @@ const Login = () => {
     }
   };
 
-  const handleQuickAdminLogin = () => {
-    setFormData({
-      email: "admin@bdavid.com",
-      password: "admin123"
-    });
+  const handleResetPassword = async () => {
+    if (!resetEmail) {
+      toast({
+        title: "Email required",
+        description: "Please enter your email address",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, resetEmail);
+      toast({
+        title: "Reset link sent",
+        description: "Check your inbox for a password reset link."
+      });
+      setIsResetModalOpen(false);
+      setResetEmail("");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
   };
 
   return (
@@ -101,9 +124,13 @@ const Login = () => {
           <div className="space-y-1">
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
-              <Link to="/forgot-password" className="text-sm text-brand-600 hover:text-brand-800">
+              <button
+                type="button"
+                onClick={() => setIsResetModalOpen(true)}
+                className="text-sm text-brand-600 hover:text-brand-800"
+              >
                 Forgot password?
-              </Link>
+              </button>
             </div>
             <div className="relative">
               <Input
@@ -147,26 +174,6 @@ const Login = () => {
             )}
           </Button>
 
-          <div className="relative my-4">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-2 bg-white text-gray-500">Or use test admin login</span>
-            </div>
-          </div>
-
-          <Button
-            type="button"
-            variant="outline"
-            className="w-full flex items-center justify-center"
-            onClick={handleQuickAdminLogin}
-            disabled={isLoading}
-          >
-            <Shield className="mr-2 h-5 w-5" />
-            Use Admin Test Credentials
-          </Button>
-
           <div className="text-center mt-4">
             <p className="text-sm text-gray-600">
               Don't have an account?{" "}
@@ -177,6 +184,26 @@ const Login = () => {
           </div>
         </form>
       </div>
+
+      {/* Forgot Password Modal */}
+      {isResetModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
+            <h3 className="text-lg font-semibold mb-2">Reset Password</h3>
+            <p className="text-sm text-gray-500 mb-4">Enter your email address to receive a password reset link.</p>
+            <Input
+              type="email"
+              placeholder="your@email.com"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+            />
+            <div className="flex justify-end space-x-2 mt-4">
+              <Button variant="ghost" onClick={() => setIsResetModalOpen(false)}>Cancel</Button>
+              <Button onClick={handleResetPassword}>Send Reset Email</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
