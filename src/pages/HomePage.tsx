@@ -76,19 +76,10 @@ const HomePage = () => {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">Ready to start tracking your Project?</h2>
           <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-<<<<<<< HEAD
-=======
             Join, hundreds of businesses already using CustomerTrack to manage their client relationships.
           </p> 
-<<<<<<< HEAD
-          <h2 className="text-3xl font-bold mb-6">Ready to start tracking your customers?</h2>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
->>>>>>> 3ad9745 (hi)
-            Join hundreds of businesses already using CustomerTrack to manage their client relationships.
-          </p>
-=======
+
           
->>>>>>> 842017f (81 home)
           <Link to="/register">
             <Button size="lg" className="bg-brand-600 hover:bg-brand-700">
               Create Your Account

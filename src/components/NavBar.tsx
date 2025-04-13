@@ -1,15 +1,7 @@
-<<<<<<< HEAD
-
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, User, LayoutDashboard, FileText, History } from 'lucide-react';
-=======
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Menu, X, User, LayoutDashboard } from 'lucide-react';
->>>>>>> 23f3146 (login/navbar)
 import { useIsMobile } from '@/hooks/use-mobile';
 
 const NavBar = () => {
@@ -19,17 +11,11 @@ const NavBar = () => {
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Check if user is logged in from localStorage
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       setIsLoggedIn(true);
-      // Check if user is admin
       const userData = JSON.parse(storedUser);
-<<<<<<< HEAD
-      if (userData.role === 'admin') {
-=======
-      if (userData.isAdmin) {
->>>>>>> 23f3146 (login/navbar)
+      if (userData.role === 'admin' || userData.isAdmin) {
         setIsAdmin(true);
       }
     }
@@ -59,12 +45,10 @@ const NavBar = () => {
               <Link to="/about" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
                 About
               </Link>
-              
+
               {isLoggedIn ? (
                 <>
-<<<<<<< HEAD
                   {isAdmin ? (
-                    // Admin navigation links
                     <>
                       <Link to="/dashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
                         Dashboard
@@ -74,7 +58,6 @@ const NavBar = () => {
                       </Link>
                     </>
                   ) : (
-                    // Regular user navigation links
                     <>
                       <Link to="/submit-info" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
                         <FileText className="h-4 w-4 mr-1" /> Submit Info
@@ -84,29 +67,12 @@ const NavBar = () => {
                       </Link>
                     </>
                   )}
-                  
+
                   <Link to="/profile" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
                     <User className="h-4 w-4 mr-1" /> Profile
                   </Link>
-                  
-=======
-                  <Link to="/dashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
-                    Dashboard
-                  </Link>
-                  <Link to="/profile" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                    <User className="h-4 w-4 mr-1" /> Profile
-                  </Link>
-                  {isAdmin && (
-                    <Link to="/admin" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                      <LayoutDashboard className="h-4 w-4 mr-1" /> Admin
-                    </Link>
-                  )}
->>>>>>> 23f3146 (login/navbar)
-                  <Button 
-                    variant="outline" 
-                    onClick={handleLogout} 
-                    className="ml-4"
-                  >
+
+                  <Button variant="outline" onClick={handleLogout} className="ml-4">
                     Sign Out
                   </Button>
                 </>
@@ -140,89 +106,40 @@ const NavBar = () => {
       {isMobile && isMenuOpen && (
         <div className="md:hidden bg-white border-t">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <Link 
-              to="/" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
+            <Link to="/" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
               Home
             </Link>
-            <Link 
-              to="/about" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50"
-              onClick={() => setIsMenuOpen(false)}
-            >
+            <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
               About
             </Link>
-            
+
             {isLoggedIn ? (
               <>
                 {isAdmin ? (
-                  // Admin mobile navigation
                   <>
-                    <Link 
-                      to="/dashboard" 
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
+                    <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
                       Dashboard
                     </Link>
-                    <Link 
-                      to="/admin" 
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
+                    <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center" onClick={() => setIsMenuOpen(false)}>
                       <LayoutDashboard className="h-4 w-4 mr-1" /> Admin
                     </Link>
                   </>
                 ) : (
-                  // Regular user mobile navigation
                   <>
-                    <Link 
-                      to="/submit-info" 
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
+                    <Link to="/submit-info" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center" onClick={() => setIsMenuOpen(false)}>
                       <FileText className="h-4 w-4 mr-1" /> Submit Info
                     </Link>
-                    <Link 
-                      to="/my-projects" 
-                      className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
+                    <Link to="/my-projects" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center" onClick={() => setIsMenuOpen(false)}>
                       <History className="h-4 w-4 mr-1" /> My Projects
                     </Link>
                   </>
                 )}
-                
-                <Link 
-                  to="/profile" 
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center"
-                  onClick={() => setIsMenuOpen(false)}
-                >
+
+                <Link to="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center" onClick={() => setIsMenuOpen(false)}>
                   <User className="h-4 w-4 mr-1" /> Profile
                 </Link>
-<<<<<<< HEAD
-                
-=======
-                {isAdmin && (
-                  <Link 
-                    to="/admin" 
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <LayoutDashboard className="h-4 w-4 mr-1" /> Admin
-                  </Link>
-                )}
->>>>>>> 23f3146 (login/navbar)
-                <Button 
-                  variant="outline" 
-                  onClick={() => {
-                    handleLogout();
-                    setIsMenuOpen(false);
-                  }} 
-                  className="w-full mt-2"
-                >
+
+                <Button variant="outline" onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="w-full mt-2">
                   Sign Out
                 </Button>
               </>
