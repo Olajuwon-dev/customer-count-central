@@ -1,234 +1,93 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useToast } from '@/components/ui/use-toast';
-import { Eye, EyeOff, LogIn, Shield } from 'lucide-react';
-import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { useNavigate } from 'react-router-dom';
 import { auth, db } from '@/lib/firebase';
-import { doc, getDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { useUser } from '@/context/Usercontext';
+import { Button } from '@/components/ui/button';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
-  const [resetEmail, setResetEmail] = useState("");
+  const { setUser } = useUser();
 
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.email || !formData.password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      const user = userCredential.user;
-
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      if (!userDoc.exists()) {
-        throw new Error("No user data found.");
-      }
-
-      const userData = userDoc.data();
-      localStorage.setItem("user", JSON.stringify(userData));
-
-      toast({
-        title: "Signed in",
-        description: "Welcome back!"
-      });
-
-      if (userData.role === "admin") {
-        navigate("/AdminDashboard");
-      } else {
-        navigate("/Profile");
-      }
-    } catch (error: any) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive"
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    if (!formData.email || !formData.password) {
-      toast({
-        title: "Missing fields",
-        description: "Please enter both email and password.",
-        variant: "destructive",
-      });
-      return;
-    }
-  
-    setIsLoading(true);
-  
+    setError('');
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      const user = userCredential.user;
-  
-  
-      const name = user.displayName || "No Name";
-  
-      
-      localStorage.setItem("user", JSON.stringify({
-        uid: user.uid,
-        name,
-        email: user.email,
-      }));
-  
-      toast({
-        title: "Login successful",
-        description: "Welcome back!",
-      });
- 
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      const userData = userDoc.exists() ? userDoc.data() : {};
-      const role = userData?.role;
-  
-  
-      navigate(role === "admin" ? "/AdminDashboard" : "/Profile");
-  
-    } catch (error: any) {
-      toast({
-        title: "Login failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
+      // Sign in with Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const { uid } = userCredential.user;
+
+      // Get user data from Firestore
+      const userDoc = await getDoc(doc(db, 'users', uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const userInfo = {
+          uid,
+          email,
+          name: userData.name || '',
+          role: userData.role || 'user',
+        };
+
+        // Store in context & localStorage
+        setUser(userInfo);
+        localStorage.setItem('user', JSON.stringify(userInfo));
+
+        // Redirect by role
+        if (userInfo.role === 'admin') {
+          navigate('/admindashboard');
+        } else {
+          navigate('/Profile');
+        }
+      } else {
+        setError('User record not found in database.');
+      }
+    } catch (err: any) {
+      console.error('Login error:', err);
+      setError(err.message || 'Failed to log in');
     }
   };
-  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-        <div className="text-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome Back</h2>
-          <p className="mt-2 text-gray-600">Sign in to your account</p>
+    <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow-md">
+      <h2 className="text-2xl font-semibold mb-4">Login</h2>
+
+      <form onSubmit={handleLogin} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium">Email</label>
+          <input
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+          />
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div className="space-y-1">
-            <Label htmlFor="email">Email Address</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              required
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div className="space-y-1">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password">Password</Label>
-              <button
-                type="button"
-                onClick={() => setIsResetModalOpen(true)}
-                className="text-sm text-brand-600 hover:text-brand-800"
-              >
-                Forgot password?
-              </button>
-            </div>
-            <div className="relative">
-              <Input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                required
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                className="pr-10"
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <EyeOff className="h-5 w-5 text-gray-400" />
-                ) : (
-                  <Eye className="h-5 w-5 text-gray-400" />
-                )}
-              </button>
-            </div>
-          </div>
-
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? (
-              <span className="flex items-center">
-                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-                </svg>
-                Signing in...
-              </span>
-            ) : (
-              <span className="flex items-center justify-center">
-                <LogIn className="mr-2 h-5 w-5" />
-                Sign In
-              </span>
-            )}
-          </Button>
-
-          <div className="text-center mt-4">
-            <p className="text-sm text-gray-600">
-              Don't have an account?{" "}
-              <Link to="/register" className="text-brand-600 hover:text-brand-800 font-medium">
-                Sign up
-              </Link>
-            </p>
-          </div>
-        </form>
-      </div>
-
-      {/* Forgot Password Modal */}
-      {isResetModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm">
-            <h3 className="text-lg font-semibold mb-2">Reset Password</h3>
-            <p className="text-sm text-gray-500 mb-4">Enter your email address to receive a password reset link.</p>
-            <Input
-              type="email"
-              placeholder="your@email.com"
-              value={resetEmail}
-              onChange={(e) => setResetEmail(e.target.value)}
-            />
-            <div className="flex justify-end space-x-2 mt-4">
-              <Button variant="ghost" onClick={() => setIsResetModalOpen(false)}>Cancel</Button>
-              <Button onClick={handleResetPassword}>Send Reset Email</Button>
-            </div>
-          </div>
+        <div>
+          <label className="block text-sm font-medium">Password</label>
+          <input
+            type="password"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+          />
         </div>
-      )}
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <Button type="submit" className="w-full">Login</Button>
+      </form>
+
+      <p className="mt-4 text-sm text-center">
+        Don’t have an account? <a href="/register" className="text-brand-500 hover:underline">Sign up</a>
+      </p>
     </div>
   );
 };

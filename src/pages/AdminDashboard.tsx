@@ -1,24 +1,42 @@
-
-import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '@/context/Usercontext';
+import {
+  Card, CardContent, CardDescription, CardHeader, CardTitle
+} from "@/components/ui/card";
+import {
+  Tabs, TabsContent, TabsList, TabsTrigger
+} from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Users, Globe, BarChart, Search, PieChart, Calendar, User, Settings } from 'lucide-react';
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue
+} from "@/components/ui/select";
+import {
+  Users, Globe, BarChart, Search, PieChart, Calendar, User, Settings
+} from 'lucide-react';
 
 const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  
-  // Mock data for the dashboard - would come from API in real app
+  const { user } = useUser();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || user.role !== 'admin') {
+      navigate('/'); // Redirect non-admin users
+    }
+  }, [user, navigate]);
+
+  if (!user || user.role !== 'admin') return null; // Block UI flicker
+
   const stats = {
     totalCustomers: 128,
     activeProjects: 85,
     completedProjects: 43,
     newCustomersThisMonth: 14
   };
-  
+
   const customers = [
     { id: 1, name: "Tech Solutions Inc.", website: "techsolutions.com", status: "Active", projects: 3 },
     { id: 2, name: "Creative Studios", website: "creativestudios.org", status: "Active", projects: 1 },
@@ -26,7 +44,7 @@ const AdminDashboard = () => {
     { id: 4, name: "Health Services", website: "healthservices.com", status: "Active", projects: 1 },
     { id: 5, name: "Education Portal", website: "educationportal.org", status: "Active", projects: 2 },
   ];
-  
+
   const recentActivity = [
     { id: 1, customer: "Tech Solutions Inc.", action: "Project milestone completed", date: "Today" },
     { id: 2, customer: "Creative Studios", action: "New project started", date: "Yesterday" },
@@ -35,11 +53,10 @@ const AdminDashboard = () => {
     { id: 5, customer: "Education Portal", action: "New website added", date: "4 days ago" },
   ];
 
-  const filteredCustomers = customers.filter(customer => 
+  const filteredCustomers = customers.filter(customer =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     customer.website.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">

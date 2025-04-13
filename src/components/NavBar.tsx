@@ -1,37 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, User, LayoutDashboard, FileText, History } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { signOut } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
+import { useUser } from '@/context/Usercontext';
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isMobile = useIsMobile();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [username, setUsername] = useState('');
   const navigate = useNavigate();
+  const { user, logout } = useUser();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const userData = JSON.parse(storedUser);
-      setIsLoggedIn(true);
-      setUsername(userData.name || '');
-      if (userData.role === 'admin') {
-        setIsAdmin(true);
-      }
-    }
-  }, []);
+  const isLoggedIn = !!user;
+  const isAdmin = user?.role === 'admin';
+  const username = user?.name || 'Profile';
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      localStorage.removeItem('user');
-      setIsLoggedIn(false);
-      setIsAdmin(false);
+      await logout();
       navigate('/');
     } catch (error) {
       console.error("Logout error:", error);
@@ -61,7 +47,7 @@ const NavBar = () => {
                 <>
                   {isAdmin ? (
                     <>
-                      <Link to="/dashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
+                      <Link to="/admindashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
                         Dashboard
                       </Link>
                       <Link to="/admin" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
@@ -80,7 +66,7 @@ const NavBar = () => {
                   )}
 
                   <Link to="/profile" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
-                    <User className="h-4 w-4 mr-1" /> {username || 'Profile'}
+                    <User className="h-4 w-4 mr-1" /> {username}
                   </Link>
 
                   <Button variant="outline" onClick={handleLogout} className="ml-4">
@@ -128,7 +114,7 @@ const NavBar = () => {
               <>
                 {isAdmin ? (
                   <>
-                    <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
+                    <Link to="/admindashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
                       Dashboard
                     </Link>
                     <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center" onClick={() => setIsMenuOpen(false)}>
@@ -147,7 +133,7 @@ const NavBar = () => {
                 )}
 
                 <Link to="/profile" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center" onClick={() => setIsMenuOpen(false)}>
-                  <User className="h-4 w-4 mr-1" /> {username || 'Profile'}
+                  <User className="h-4 w-4 mr-1" /> {username}
                 </Link>
 
                 <Button variant="outline" onClick={() => { handleLogout(); setIsMenuOpen(false); }} className="w-full mt-2">
