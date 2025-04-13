@@ -16,42 +16,41 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-
+  
     try {
-      // Sign in with Firebase Auth
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const { uid } = userCredential.user;
-
-      // Get user data from Firestore
-      const userDoc = await getDoc(doc(db, 'users', uid));
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        const userInfo = {
-          uid,
-          email,
-          name: userData.name || '',
-          role: userData.role || 'user',
-        };
-
-        // Store in context & localStorage
-        setUser(userInfo);
-        localStorage.setItem('user', JSON.stringify(userInfo));
-
-        // Redirect by role
-        if (userInfo.role === 'admin') {
-          navigate('/admindashboard');
+      const user = userCredential.user;
+  
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const role = userData.role || "user";
+  
+        // Store role in your global user context
+        setUser({
+          uid: user.uid,
+          email: user.email,
+          username: userData.username,
+          role,
+        });
+  
+        // ✅ Redirect based on role
+        if (role === "admin") {
+          navigate("/AdminDashboard");
         } else {
-          navigate('/Profile');
+          navigate("/Profile");
         }
       } else {
-        setError('User record not found in database.');
+        console.error("No user document found!");
       }
-    } catch (err: any) {
-      console.error('Login error:', err);
-      setError(err.message || 'Failed to log in');
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("Invalid credentials");
     }
   };
+  
 
   return (
     <div className="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow-md">
