@@ -57,9 +57,9 @@ const Login = () => {
       });
 
       if (userData.role === "admin") {
-        navigate("/admin");
+        navigate("/AdminDashboard");
       } else {
-        navigate("/dashboard");
+        navigate("/Dashboard");
       }
     } catch (error: any) {
       toast({
