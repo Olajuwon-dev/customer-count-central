@@ -28,7 +28,7 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!formData.name || !formData.email || !formData.password) {
       toast({
         title: "Error",
@@ -37,7 +37,7 @@ const Register = () => {
       });
       return;
     }
-  
+
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",
@@ -46,36 +46,38 @@ const Register = () => {
       });
       return;
     }
-  
+
     setIsLoading(true);
-  
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
-  
+
       const user = userCredential.user;
-  
+
       await updateProfile(user, {
         displayName: formData.name
       });
-  
+
+      const isAdmin = formData.email === "admin@bdavid.com";
+
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         name: formData.name,
         email: formData.email,
-        role: "user", // default role
+        role: isAdmin ? "admin" : "user",
         createdAt: new Date().toISOString()
       });
-  
+
       toast({
         title: "Account created",
         description: "You have successfully registered an account"
       });
-  
-      navigate("/dashboard");
+
+      navigate(isAdmin ? "/AdminDashboard" : "/Profile");
     } catch (error: any) {
       toast({
         title: "Error",
@@ -94,7 +96,7 @@ const Register = () => {
           <h2 className="text-3xl font-bold text-gray-900">Create an Account</h2>
           <p className="mt-2 text-gray-600">Sign up to start tracking your customers</p>
         </div>
-        
+
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="space-y-1">
             <Label htmlFor="name">Full Name</Label>
@@ -109,7 +111,7 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-          
+
           <div className="space-y-1">
             <Label htmlFor="email">Email Address</Label>
             <Input
@@ -123,7 +125,7 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-          
+
           <div className="space-y-1">
             <Label htmlFor="password">Password</Label>
             <div className="relative">
@@ -150,7 +152,7 @@ const Register = () => {
               </button>
             </div>
           </div>
-          
+
           <div className="space-y-1">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
@@ -164,10 +166,10 @@ const Register = () => {
               className="auth-input"
             />
           </div>
-          
-          <Button 
-            type="submit" 
-            className="auth-button" 
+
+          <Button
+            type="submit"
+            className="auth-button"
             disabled={isLoading}
           >
             {isLoading ? (
@@ -185,7 +187,7 @@ const Register = () => {
               </span>
             )}
           </Button>
-          
+
           <div className="text-center mt-4">
             <p className="text-sm text-gray-600">
               Already have an account?{" "}

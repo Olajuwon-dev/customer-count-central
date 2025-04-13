@@ -59,7 +59,7 @@ const Login = () => {
       if (userData.role === "admin") {
         navigate("/AdminDashboard");
       } else {
-        navigate("/Dashboard");
+        navigate("/Profile");
       }
     } catch (error: any) {
       toast({
