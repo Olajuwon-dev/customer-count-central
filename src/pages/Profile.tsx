@@ -6,36 +6,32 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { User, History, Globe, FileText, Clock } from 'lucide-react';
 
+// This would be fetched from an API in a real implementation
+import { useEffect, useState } from "react";
+
 const Profile = () => {
-  // This would be fetched from an API in a real implementation
-  const userData = {
-    name: "John Doe",
-    email: "john@example.com",
-    projects: [
-      {
-        id: 1,
-        name: "Corporate Website Redesign",
-        status: "In Progress",
-        progress: 65,
-        history: [
-          { date: "2025-03-15", action: "Design phase completed" },
-          { date: "2025-03-01", action: "Project started" },
-        ],
-        website: "example.com"
-      },
-      {
-        id: 2,
-        name: "E-commerce Platform",
-        status: "Planning",
-        progress: 15,
-        history: [
-          { date: "2025-04-10", action: "Requirements gathering" },
-          { date: "2025-04-05", action: "Project initiated" },
-        ],
-        website: "shop.example.com"
-      }
-    ]
-  };
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    projects: [],
+  });
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const storedProjects = localStorage.getItem("projects");
+    
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      const parsedProjects = storedProjects ? JSON.parse(storedProjects) : [];
+  
+      setUserData({
+        name: parsedUser.name || parsedUser.displayName || "No name provided",
+        email: parsedUser.email || "",
+        projects: parsedProjects,
+      });
+    }
+  }, []);
+
 
   return (
     <div className="container mx-auto px-4 py-8">
