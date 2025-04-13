@@ -28,7 +28,7 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
     if (!formData.name || !formData.email || !formData.password) {
       toast({
         title: "Error",
@@ -37,7 +37,7 @@ const Register = () => {
       });
       return;
     }
-
+  
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",
@@ -46,24 +46,24 @@ const Register = () => {
       });
       return;
     }
-
+  
     setIsLoading(true);
-
+  
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         formData.email,
         formData.password
       );
-
+  
       const user = userCredential.user;
-
+  
       await updateProfile(user, {
         displayName: formData.name
       });
-
+  
       const isAdmin = formData.email === "admin@bdavid.com";
-
+  
       await setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         name: formData.name,
@@ -71,12 +71,19 @@ const Register = () => {
         role: isAdmin ? "admin" : "user",
         createdAt: new Date().toISOString()
       });
-
+  
+      // ✅ Save user info to localStorage
+      localStorage.setItem("user", JSON.stringify({
+        uid: user.uid,
+        name: formData.name,
+        email: formData.email,
+      }));
+  
       toast({
         title: "Account created",
         description: "You have successfully registered an account"
       });
-
+  
       navigate(isAdmin ? "/AdminDashboard" : "/Profile");
     } catch (error: any) {
       toast({
@@ -88,6 +95,7 @@ const Register = () => {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
