@@ -47,7 +47,7 @@ const NavBar = () => {
                 <>
                   {isAdmin ? (
                     <>
-                      <Link to="/admindashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
+                      <Link to="/dashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
                         Dashboard
                       </Link>
                       <Link to="/admin" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium flex items-center">
@@ -114,7 +114,7 @@ const NavBar = () => {
               <>
                 {isAdmin ? (
                   <>
-                    <Link to="/admindashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
+                    <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
                       Dashboard
                     </Link>
                     <Link to="/admin" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50 flex items-center" onClick={() => setIsMenuOpen(false)}>
