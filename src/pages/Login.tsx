@@ -72,32 +72,57 @@ const Login = () => {
     }
   };
 
-  const handleResetPassword = async () => {
-    if (!resetEmail) {
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    if (!formData.email || !formData.password) {
       toast({
-        title: "Email required",
-        description: "Please enter your email address",
-        variant: "destructive"
+        title: "Missing fields",
+        description: "Please enter both email and password.",
+        variant: "destructive",
       });
       return;
     }
-
+  
+    setIsLoading(true);
+  
     try {
-      await sendPasswordResetEmail(auth, resetEmail);
+      const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      const user = userCredential.user;
+  
+  
+      const name = user.displayName || "No Name";
+  
+      
+      localStorage.setItem("user", JSON.stringify({
+        uid: user.uid,
+        name,
+        email: user.email,
+      }));
+  
       toast({
-        title: "Reset link sent",
-        description: "Check your inbox for a password reset link."
+        title: "Login successful",
+        description: "Welcome back!",
       });
-      setIsResetModalOpen(false);
-      setResetEmail("");
+ 
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      const userData = userDoc.exists() ? userDoc.data() : {};
+      const role = userData?.role;
+  
+  
+      navigate(role === "admin" ? "/AdminDashboard" : "/Profile");
+  
     } catch (error: any) {
       toast({
-        title: "Error",
+        title: "Login failed",
         description: error.message,
-        variant: "destructive"
+        variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
