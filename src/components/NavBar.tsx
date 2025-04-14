@@ -42,11 +42,17 @@ const NavBar = () => {
               <Link to="/about" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
                 About
               </Link>
+              <Link to="/reviewspage" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
+                Reviews
+              </Link>
 
               {isLoggedIn ? (
                 <>
                   {isAdmin ? (
                     <>
+                     <Link to="/reviewspage" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
+                        Reviews
+                      </Link>
                       <Link to="/dashboard" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
                         Dashboard
                       </Link>
@@ -109,11 +115,17 @@ const NavBar = () => {
             <Link to="/about" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
               About
             </Link>
+            <Link to="/reviewspage" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
+                Reviews
+              </Link>
 
             {isLoggedIn ? (
               <>
                 {isAdmin ? (
                   <>
+                   <Link to="/reviewspage" className="text-gray-700 hover:text-brand-500 px-3 py-2 rounded-md text-sm font-medium">
+                      Reviews
+                    </Link>
                     <Link to="/dashboard" className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-brand-500 hover:bg-gray-50" onClick={() => setIsMenuOpen(false)}>
                       Dashboard
                     </Link>

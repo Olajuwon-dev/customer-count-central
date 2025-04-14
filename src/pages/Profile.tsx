@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { User, History, Globe, FileText, Clock } from 'lucide-react';
 import WhatsAppButton from '@/components/WhatsAppButton';
+import SubmitReview from '@/components/SubmitReview';
 
 // This would be fetched from an API in a real implementation
 import { useEffect, useState } from "react";
@@ -145,6 +146,9 @@ const Profile = () => {
               </Card>
             </TabsContent>
           </Tabs>
+          <div className="mt-10">
+            <SubmitReview />
+          </div>
         </div>
       </div>
     </div>

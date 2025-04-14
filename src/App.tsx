@@ -18,6 +18,7 @@ import NotFound from "./pages/NotFound";
 import SubmitInfo from "./pages/SubmitInfo";
 import MyProjects from "./pages/MyProjects";
 import ProjectDetail from "./pages/ProjectDetail";
+import ReviewsPage from "./pages/ReviewsPage";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
           <Route path="/submit-info" element={<Layout><SubmitInfo /></Layout>} />
           <Route path="/my-projects" element={<Layout><MyProjects /></Layout>} />
           <Route path="/project/:id" element={<Layout><ProjectDetail /></Layout>} />
+          <Route path="/reviewspage" element={<Layout><ReviewsPage/></Layout>} />
           <Route path="*" element={<Layout><NotFound /></Layout>} />
         </Routes>
       </BrowserRouter>
