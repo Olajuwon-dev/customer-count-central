@@ -19,7 +19,7 @@ import SubmitInfo from "./pages/SubmitInfo";
 import MyProjects from "./pages/MyProjects";
 import ProjectDetail from "./pages/ProjectDetail";
 import ReviewsPage from "./pages/ReviewsPage";
-
+import Reviews from './pages/Reviews';
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -42,6 +42,7 @@ const App = () => (
           <Route path="/my-projects" element={<Layout><MyProjects /></Layout>} />
           <Route path="/project/:id" element={<Layout><ProjectDetail /></Layout>} />
           <Route path="/reviewspage" element={<Layout><ReviewsPage/></Layout>} />
+          <Route path="/reviews" element={<Layout><Reviews /></Layout>} />
           <Route path="*" element={<Layout><NotFound /></Layout>} />
         </Routes>
       </BrowserRouter>
