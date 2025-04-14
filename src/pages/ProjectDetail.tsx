@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Globe, FileText, ArrowLeft, Clock, History, Settings, Calendar } from 'lucide-react';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 interface Project {
   id: string;
@@ -150,6 +151,10 @@ const ProjectDetail = () => {
                       <span>{project.progress}%</span>
                     </div>
                     <Progress value={project.progress} className="h-2.5" />
+                  </div>
+
+                  <div className="mt-6 flex justify-end">
+                    <WhatsAppButton />
                   </div>
                   
                   <div>

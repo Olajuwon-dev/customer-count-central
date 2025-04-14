@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Globe, FileText, ExternalLink, Clock, History, PlusCircle } from 'lucide-react';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 interface Project {
   id: string;
@@ -76,6 +77,8 @@ const MyProjects = () => {
           </Link>
         </div>
       </div>
+
+      
       
       <Tabs defaultValue="active" className="mb-8" onValueChange={setActiveTab}>
         <TabsList>
@@ -83,7 +86,13 @@ const MyProjects = () => {
           <TabsTrigger value="completed">Completed</TabsTrigger>
           <TabsTrigger value="all">All Projects</TabsTrigger>
         </TabsList>
+
       </Tabs>
+
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">My Projects</h1>
+        <WhatsAppButton />
+      </div>
       
       {isLoading ? (
         <div className="flex justify-center items-center py-10">
@@ -192,8 +201,11 @@ const MyProjects = () => {
                     <Button variant="outline" className="w-full">View Project Details</Button>
                   </Link>
                 </div>
+                
               </CardContent>
             </Card>
+
+            
           ))}
         </div>
       )}

@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { User, History, Globe, FileText, Clock } from 'lucide-react';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 // This would be fetched from an API in a real implementation
 import { useEffect, useState } from "react";
@@ -60,6 +61,9 @@ const Profile = () => {
                 <p className="text-base">{userData.projects.length}</p>
               </div>
             </div>
+            <div className="mt-4">
+              <WhatsAppButton />
+            </div>
           </CardContent>
         </Card>
 
@@ -107,6 +111,7 @@ const Profile = () => {
                         </ul>
                       </div>
                     </div>
+                    
                   </CardContent>
                 </Card>
               ))}
