@@ -93,6 +93,24 @@ const CustomerDetail = () => {
     );
   }
 
+  const updateStatus = async (newStatus: string) => {
+    const customerRef = doc(db, "customers", customerId);
+  
+    try {
+      await updateDoc(customerRef, {
+        currentStatus: newStatus,
+        phases: arrayUnion({
+          status: newStatus,
+          date: new Date().toISOString()
+        })
+      });
+      toast({ title: "Status updated", description: `Project marked as ${newStatus}` });
+    } catch (err) {
+      toast({ title: "Error", description: "Failed to update status", variant: "destructive" });
+    }
+  };
+  
+
   return (
     <div className="page-container py-10">
       <div className="flex items-center mb-8">
@@ -228,6 +246,12 @@ const CustomerDetail = () => {
             </div>
           </CardContent>
         </Card>
+
+        <Button onClick={() => updateStatus("Active")}>Mark Active</Button>
+        <Button onClick={() => updateStatus("Inactive")}>Mark Inactive</Button>
+        <Button onClick={() => updateStatus("Completed")}>Submit/Complete</Button>
+
+
       </div>
     </div>
   );

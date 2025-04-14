@@ -216,6 +216,15 @@ const ProjectDetail = () => {
                               {new Date(item.date).toLocaleDateString()} at {new Date(item.date).toLocaleTimeString()}
                             </p>
                           </div>
+
+                            {project.phases.map((phase, idx) => (
+                            <div key={idx} className="flex items-center justify-between text-sm border-b py-2">
+                              <span className="font-medium">{phase.status}</span>
+                              <span className="text-gray-500">{new Date(phase.date).toLocaleString()}</span>
+                            </div>
+                          ))}
+
+
                         </div>
                       ))}
                     </div>

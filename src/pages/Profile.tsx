@@ -112,10 +112,15 @@ const Profile = () => {
                         </ul>
                       </div>
                     </div>
-                    
+                      
                   </CardContent>
+                  
                 </Card>
+                
               ))}
+              <div className="mt-10">
+                    <SubmitReview />
+                  </div>
             </TabsContent>
             
             <TabsContent value="history" className="mt-4">
@@ -146,9 +151,7 @@ const Profile = () => {
               </Card>
             </TabsContent>
           </Tabs>
-          <div className="mt-10">
-            <SubmitReview />
-          </div>
+         
         </div>
       </div>
     </div>
